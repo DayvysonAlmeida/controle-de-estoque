@@ -1,0 +1,68 @@
+{% extends 'estoque/base.html' %}
+{% load permissions %}
+
+{% block title %}Lista de Equipamentos{% endblock %}
+
+{% block content %}
+<h2>Lista de Equipamentos</h2>
+<div class="filter-container">
+    <form method="get" class="filter-form">
+        <input type="text" name="query" placeholder="Buscar por Nome" value="{{ request.GET.query }}" class="filter-input">
+        <input type="text" name="setor" placeholder="Filtrar por Setor" value="{{ request.GET.setor }}" class="filter-input">
+        <input type="text" name="tombamento" placeholder="Filtrar por Tombamento" value="{{ request.GET.tombamento }}" class="filter-input">
+        <select name="categoria" class="filter-input">
+            <option value="">Todas as Categorias</option>
+            {% for categoria in form.fields.categoria.choices %}
+                <option value="{{ categoria.0 }}" {% if categoria.0 == request.GET.categoria %}selected{% endif %}>{{ categoria.1 }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit" class="filter-button">Buscar</button>
+    </form>
+</div>
+
+{% if user|has_perm:'estoque.add_equipamento' %}
+    <a href="{% url 'criar_equipamento' %}" class="button create-button">
+        <span class="icon">+</span> Criar
+    </a>
+{% else %}
+    <button type="button" class="button create-button" onclick="alert('Você não tem permissão para criar equipamentos.');">
+        <span class="icon">+</span> Criar
+    </button>
+{% endif %}
+
+<table>
+    <thead>
+        <tr>
+            <th>Nome</th>
+            <th>Categoria</th>
+            <th>Tombamento</th>
+            <th>Disponibilidade</th>
+            <th>Setor</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for equipamento in page_obj %}
+            <tr>
+                <td><a href="{% url 'detalhe_equipamento' equipamento.id %}">{{ equipamento.nome }}</a></td>
+                <td>{{ equipamento.categoria }}</td>
+                <td>{{ equipamento.tombamento }}</td>
+                <td>{{ equipamento.get_status_display }}</td>
+                <td>{{ equipamento.setor }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<div class="pagination">
+    {% if is_paginated %}
+        {% if page_obj.has_previous %}
+            <a href="?page=1" class="pagination-button">&laquo; Primeiro</a>
+            <a href="?page={{ page_obj.previous_page_number }}" class="pagination-button">Anterior</a>
+        {% endif %}
+        <span>Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span>
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}" class="pagination-button">Próximo</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}" class="pagination-button">Último &raquo;</a>
+        {% endif %}
+    {% endif %}
+</div>
+{% endblock %}

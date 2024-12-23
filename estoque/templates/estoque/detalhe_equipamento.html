@@ -1,0 +1,30 @@
+{% extends 'estoque/base.html' %}
+
+{% block title %}Detalhes do Equipamento{% endblock %}
+
+{% block content %}
+<h2>Detalhes do Equipamento</h2>
+<div class="details-container">
+    <p><strong>Nome:</strong> {{ equipamento.nome }}</p>
+    <p><strong>Categoria:</strong> {{ equipamento.categoria }}</p>
+    <p><strong>Tombamento:</strong> {{ equipamento.tombamento }}</p>
+    <p><strong>Status:</strong> {{ equipamento.status }}</p>
+    <p><strong>Setor:</strong> {{ equipamento.setor }}</p>
+    <p><strong>Descrição:</strong> {{ equipamento.descricao }}</p>
+</div>
+<h3>Histórico de Alterações</h3>
+<div class="details-container">
+    {% for historico in equipamento.historicos.all %}
+        <p><strong>{{ historico.data_alteracao|date:"d/m/Y H:i" }}:</strong> {{ historico.descricao }} (por {{ historico.alterado_por.username }})</p>
+    {% empty %}
+        <p>Sem histórico de alterações.</p>
+    {% endfor %}
+</div>
+<div class="details-actions">
+    <a href="{% url 'editar_equipamento' equipamento.id %}" class="details-button">Editar</a>
+    <form method="post" action="{% url 'deletar_equipamento' equipamento.id %}" style="display: inline;">
+        {% csrf_token %}
+        <button type="submit" class="details-button delete-button">Excluir</button>
+    </form>
+</div>
+{% endblock %}

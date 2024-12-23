@@ -1,0 +1,46 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criar Equipamento</title>
+    <link rel="stylesheet" href="{% static 'src/styles.css' %}">
+    <script src="{% static 'src/script.js' %}" defer></script>
+</head>
+<body>
+    <header class="navbar">
+        <h1>Controle de Estoque</h1>
+        <div class="navbar-user">
+            {% if user.is_authenticated %}
+                Você está logado como {{ user.username }} |
+                <form method="post" action="{% url 'logout' %}" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="navbar-button">Logout</button>
+                </form>
+            {% else %}
+                <a href="{% url 'login' %}" class="navbar-button">Login</a>
+            {% endif %}
+        </div>
+    </header>
+    <aside class="sidebar">
+        <div class="sidebar-header">Menu</div>
+        <nav>
+            <a href="{% if user.is_authenticated %}{% url 'lista_equipamentos' %}{% else %}{% url 'login' %}{% endif %}">Início</a>
+            <a href="{% url 'lista_equipamentos' %}">Equipamentos</a>
+            <a href="{% url 'criar_equipamento' %}">Criar</a>
+            <a href="{% url 'exportar_relatorio' %}">Exportar Relatório</a>
+        </nav>
+    </aside>
+    <main class="main-content">
+        <h2>Criar Equipamento</h2>
+        <div class="form-container">
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit">Salvar</button>
+            </form>
+        </div>
+    </main>
+</body>
+</html>

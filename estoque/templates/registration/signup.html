@@ -1,0 +1,21 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastre-se</title>
+    <link rel="stylesheet" href="{% static 'src/styles.css' %}">
+</head>
+<body>
+    <div class="signup-container">
+        <h2>Cadastre-se</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="signup-button">Cadastre-se</button>
+        </form>
+        <p>Já tem uma conta? <a href="{% url 'login' %}">Login</a></p>
+    </div>
+</body>
+</html>

@@ -1,0 +1,18 @@
+<!-- estoque/templates/estoque/deletar_equipamento.html -->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deletar Equipamento</title>
+</head>
+<body>
+    <h2>Deletar Equipamento</h2>
+    <p>Tem certeza que deseja deletar o equipamento "{{ equipamento.nome }}"?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Sim, deletar</button>
+        <a href="{% url 'lista_equipamentos' %}">Cancelar</a>
+    </form>
+</body>
+</html>
